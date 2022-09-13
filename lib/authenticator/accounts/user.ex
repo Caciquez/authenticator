@@ -4,8 +4,9 @@ defmodule Authenticator.Accounts.User do
 
   schema "users" do
     field :email, :string
-    field :login_token, :string
     field :password, :string
+    field :password_confirmation, :string, virtual: true
+    field :login_token, :string, virtual: true
 
     timestamps()
   end
@@ -15,5 +16,8 @@ defmodule Authenticator.Accounts.User do
     user
     |> cast(attrs, [:email, :password])
     |> validate_required([:email, :password])
+    |> validate_confirmation(:password)
+    |> validate_format(:email, ~r/.+@.+\..+/)
+    |> unique_constraint(:email)
   end
 end

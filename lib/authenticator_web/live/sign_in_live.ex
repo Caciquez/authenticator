@@ -13,18 +13,23 @@ defmodule AuthenticatorWeb.SignInLive do
           for={@changeset}
           id="user-form"
           phx-change="validate"
-          phx-submit="save">
+          phx-submit="signin">
 
           <%= label f, :email %>
-          <%= text_input f, :email %>
+          <%= text_input f, :email, phx_debounce: "blur" %>
           <%= error_tag f, :email %>
 
           <%= label f, :password %>
-          <%= text_input f, :password %>
+          <%= password_input f, :password, value: input_value(f, :password) %>
           <%= error_tag f, :password %>
 
+
+          <%= label f, :password_confirmation %>
+          <%= password_input f, :password_confirmation, value: input_value(f, :password_confirmation) %>
+          <%= error_tag f, :password_confirmation %>
+
           <div>
-            <%= submit "Register", phx_disable_with: "Registering..." %>
+            <%= submit "Sign Up", phx_disable_with: "Registering..." %>
           </div>
         </.form>
     </div>
@@ -36,8 +41,6 @@ defmodule AuthenticatorWeb.SignInLive do
   end
 
   def handle_event("validate", %{"user" => user_params}, socket) do
-    IO.inspect(socket.assigns)
-
     changeset =
       user_params
       |> Accounts.check_registration()
@@ -46,9 +49,9 @@ defmodule AuthenticatorWeb.SignInLive do
     {:noreply, assign(socket, :changeset, changeset)}
   end
 
-  def handle_event("save", %{"user" => user_params}, socket) do
+  def handle_event("signin", %{"user" => user_params}, socket) do
     case Accounts.create_user(user_params) do
-      {:ok, _user} ->
+      {:ok, user} ->
         {:noreply,
          socket
          |> put_flash(:info, "User created successfully")
