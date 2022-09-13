@@ -11,9 +11,10 @@ defmodule Authenticator.AccountsFixtures do
     {:ok, user} =
       attrs
       |> Enum.into(%{
-        email: "some email",
-        login_token: "some login_token",
-        password: "some password"
+        email: "cool_email@gmail.com",
+        login_token: "some_random_token",
+        password: "some_password",
+        password_confirmation: "some_password"
       })
       |> Authenticator.Accounts.create_user()
 
