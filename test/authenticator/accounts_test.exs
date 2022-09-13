@@ -21,7 +21,11 @@ defmodule Authenticator.AccountsTest do
     end
 
     test "create_user/1 with valid data creates a user" do
-      valid_attrs = %{email: "some email", login_token: "some login_token", password: "some password"}
+      valid_attrs = %{
+        email: "some email",
+        login_token: "some login_token",
+        password: "some password"
+      }
 
       assert {:ok, %User{} = user} = Accounts.create_user(valid_attrs)
       assert user.email == "some email"
@@ -35,7 +39,12 @@ defmodule Authenticator.AccountsTest do
 
     test "update_user/2 with valid data updates the user" do
       user = user_fixture()
-      update_attrs = %{email: "some updated email", login_token: "some updated login_token", password: "some updated password"}
+
+      update_attrs = %{
+        email: "some updated email",
+        login_token: "some updated login_token",
+        password: "some updated password"
+      }
 
       assert {:ok, %User{} = user} = Accounts.update_user(user, update_attrs)
       assert user.email == "some updated email"

@@ -19,9 +19,9 @@ defmodule AuthenticatorWeb.Router do
 
     get "/", RedirectController, :redirect_authenticated
 
+    live "/signup", SignUpLive, :index
     live "/signin", SignInLive, :index
     live "/users", UserLive.Index, :index
-    live "/users/new", UserLive.Index, :new
     live "/users/:id/edit", UserLive.Index, :edit
 
     live "/users/:id", UserLive.Show, :show

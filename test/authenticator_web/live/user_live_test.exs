@@ -5,7 +5,11 @@ defmodule AuthenticatorWeb.UserLiveTest do
   import Authenticator.AccountsFixtures
 
   @create_attrs %{email: "some email", login_token: "some login_token", password: "some password"}
-  @update_attrs %{email: "some updated email", login_token: "some updated login_token", password: "some updated password"}
+  @update_attrs %{
+    email: "some updated email",
+    login_token: "some updated login_token",
+    password: "some updated password"
+  }
   @invalid_attrs %{email: nil, login_token: nil, password: nil}
 
   defp create_user(_) do
