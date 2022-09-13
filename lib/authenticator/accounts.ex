@@ -8,7 +8,6 @@ defmodule Authenticator.Accounts do
 
   alias Authenticator.Accounts.User
 
-
   def get_registeration_changeset(user \\ %User{}, params \\ %{}) do
     User.changeset(user, params)
   end
@@ -48,6 +47,26 @@ defmodule Authenticator.Accounts do
   def get_user!(id), do: Repo.get!(User, id)
 
   @doc """
+  Gets a single user by its email.
+
+  Returns {:error, :not_found} if the User does not exist.
+
+  ## Examples
+
+      iex> get_user!(cool_user@gmail.com)
+      %User{}
+
+      iex> get_user!(not_cool_user@gmail.com)
+      ** {:error, :not_found}
+  """
+  def get_user_by_email(email) do
+    case Repo.get_by(User, email: email) do
+      nil -> {:error, :not_found}
+      user -> {:ok, user}
+    end
+  end
+
+  @doc """
   Creates a user.
 
   ## Examples
@@ -61,7 +80,7 @@ defmodule Authenticator.Accounts do
   """
   def create_user(attrs \\ %{}) do
     %User{}
-    |> User.changeset(attrs)
+    |> User.registration_changeset(attrs)
     |> Repo.insert()
   end
 
@@ -110,6 +129,20 @@ defmodule Authenticator.Accounts do
   """
   def change_user(%User{} = user, attrs \\ %{}) do
     User.changeset(user, attrs)
+  end
+
+  def authenticate_user(%{"email" => email, "password" => password}) do
+    with {:ok, user} <- get_user_by_email(email),
+         true <- validate_password(password, user.password) do
+      {:ok, user}
+    else
+      false -> {:error, :unauthorized}
+      error -> error
+    end
+  end
+
+  defp validate_password(password, encrypted_password) do
+    Bcrypt.verify_pass(password, encrypted_password)
   end
 
   defdelegate sign(conn, data), to: __MODULE__.Token

@@ -23,13 +23,8 @@ defmodule AuthenticatorWeb.SignInLive do
           <%= password_input f, :password, value: input_value(f, :password) %>
           <%= error_tag f, :password %>
 
-
-          <%= label f, :password_confirmation %>
-          <%= password_input f, :password_confirmation, value: input_value(f, :password_confirmation) %>
-          <%= error_tag f, :password_confirmation %>
-
           <div>
-            <%= submit "Sign Up", phx_disable_with: "Registering..." %>
+            <%= submit "Sign In", phx_disable_with: "Logging in..." %>
           </div>
         </.form>
     </div>
@@ -50,16 +45,17 @@ defmodule AuthenticatorWeb.SignInLive do
   end
 
   def handle_event("signin", %{"user" => user_params}, socket) do
-    case Accounts.create_user(user_params) do
+    case Accounts.authenticate_user(user_params) do
       {:ok, user} ->
+        token = Accounts.sign(AuthenticatorWeb.Endpoint, user.id)
+
         {:noreply,
          socket
          |> put_flash(:info, "User created successfully")
          |> redirect(to: Routes.user_index_path(socket, :index))}
 
-      {:error, %Ecto.Changeset{} = changeset} ->
-        IO.inspect(changeset)
-        {:noreply, assign(socket, changeset: changeset)}
+      {:error, reason} ->
+        {:noreply, assign(socket, error: reason)}
     end
   end
 end
