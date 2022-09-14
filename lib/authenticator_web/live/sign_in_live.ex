@@ -2,6 +2,7 @@ defmodule AuthenticatorWeb.SignInLive do
   use AuthenticatorWeb, :live_view
 
   alias Authenticator.Accounts
+  alias Authenticator.Tokens
 
   def render(assigns) do
     ~H"""
@@ -47,7 +48,7 @@ defmodule AuthenticatorWeb.SignInLive do
   def handle_event("signin", %{"user" => user_params}, socket) do
     case Accounts.authenticate_user(user_params) do
       {:ok, user} ->
-        token = Accounts.sign(AuthenticatorWeb.Endpoint, user.id)
+        token = Tokens.sign(AuthenticatorWeb.Endpoint, user.id)
 
         {:noreply,
          socket

@@ -2,6 +2,7 @@ defmodule AuthenticatorWeb.SignUpLive do
   use AuthenticatorWeb, :live_view
 
   alias Authenticator.Accounts
+  alias Authenticator.Tokens
 
   def render(assigns) do
     ~H"""
@@ -50,15 +51,13 @@ defmodule AuthenticatorWeb.SignUpLive do
   end
 
   def handle_event("save", %{"user" => user_params}, socket) do
-    case Accounts.create_user(user_params) do
-      {:ok, user} ->
-        token = Accounts.sign(AuthenticatorWeb.Endpoint, user.id)
-
-        {:noreply,
-         socket
-         |> put_flash(:info, "Successfully logged in")
-         |> redirect(to: Routes.user_index_path(socket, :index))}
-
+    with {:ok, user} <- Accounts.create_user(user_params),
+         {:ok, token} <- Tokens.sign(AuthenticatorWeb.Endpoint, user.id) do
+      {:noreply,
+       socket
+       |> put_flash(:info, "Successfully logged in")
+       |> redirect(to: Routes.user_index_path(socket, :index))}
+    else
       {:error, %Ecto.Changeset{} = changeset} ->
         {:noreply, assign(socket, changeset: changeset)}
     end

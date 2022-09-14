@@ -8,6 +8,8 @@ defmodule Authenticator.Application do
   @impl true
   def start(_type, _args) do
     children = [
+      # Start the Mnesia Store
+      Authenticator.Tokens.Store,
       # Start the Ecto repository
       Authenticator.Repo,
       # Start the Telemetry supervisor
