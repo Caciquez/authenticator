@@ -144,7 +144,4 @@ defmodule Authenticator.Accounts do
   defp validate_password(password, encrypted_password) do
     Bcrypt.verify_pass(password, encrypted_password)
   end
-
-  defdelegate sign(conn, data), to: __MODULE__.Token
-  defdelegate verify(conn, token, opts \\ []), to: __MODULE__.Token
 end

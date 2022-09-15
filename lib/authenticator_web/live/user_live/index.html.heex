@@ -16,24 +16,22 @@
 <table>
   <thead>
     <tr>
-      <th>Email</th>
-      <th>Password</th>
-      <th>Login token</th>
+      <th>User id</th>
+      <th>Token</th>
+      <th>Valid Status</th>
 
       <th></th>
     </tr>
   </thead>
   <tbody id="users">
-    <%= for user <- @users do %>
-      <tr id={"user-#{user.id}"}>
-        <td><%= user.email %></td>
-        <td><%= user.password %></td>
-        <td><%= user.login_token %></td>
+    <%= for token <- @tokens do %>
+      <tr id={"user-#{token.user_id}"}>
+        <td><%= token.user_id %></td>
+        <td><%= token.login_token %></td>
+        <td><%= token.valid? %></td>
 
         <td>
-          <span><%= live_redirect "Show", to: Routes.user_show_path(@socket, :show, user) %></span>
-          <span><%= live_patch "Edit", to: Routes.user_index_path(@socket, :edit, user) %></span>
-          <span><%= link "Delete", to: "#", phx_click: "delete", phx_value_id: user.id, data: [confirm: "Are you sure?"] %></span>
+          <span><%= link "Delete", to: "#", phx_click: "delete", phx_value_id: token.uuid, data: [confirm: "Are you sure?"] %></span>
         </td>
       </tr>
     <% end %>
