@@ -1,8 +1,6 @@
 defmodule AuthenticatorWeb.UserLive.Index do
   use AuthenticatorWeb, :live_view
 
-  alias Authenticator.Accounts
-  alias Authenticator.Accounts.User
   alias Authenticator.Tokens.Store
 
   @impl true

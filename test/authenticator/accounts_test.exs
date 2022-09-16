@@ -8,7 +8,7 @@ defmodule Authenticator.AccountsTest do
 
     import Authenticator.AccountsFixtures
 
-    @invalid_attrs %{email: "invalid email", login_token: nil, password: "invalid_password"}
+    @invalid_attrs %{email: "invalid email", token: nil, password: "invalid_password"}
 
     test "list_users/0 returns all users" do
       user = user_fixture()
@@ -23,7 +23,7 @@ defmodule Authenticator.AccountsTest do
     test "create_user/1 with valid data creates a user" do
       valid_attrs = %{
         email: "some_email@gmail.com",
-        login_token: "some login_token",
+        token: "some token",
         password: "some password"
       }
 

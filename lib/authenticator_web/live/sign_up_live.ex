@@ -52,11 +52,17 @@ defmodule AuthenticatorWeb.SignUpLive do
 
   def handle_event("save", %{"user" => user_params}, socket) do
     with {:ok, user} <- Accounts.create_user(user_params),
-         {:ok, token} <- Tokens.sign(AuthenticatorWeb.Endpoint, user.id) do
+         {:ok, token} <- Tokens.generate_2fa_token(user.id) do
+      # ToDo
+      # session_token = Tokens.sign(AuthenticatorWeb.Endpoint, user.id)
+      # add phx token to session
+      # send confirmation token via email
+      IO.inspect(token)
+
       {:noreply,
        socket
-       |> put_flash(:info, "Successfully logged in")
-       |> redirect(to: Routes.user_index_path(socket, :index))}
+       |> put_flash(:info, "Successfully Registered")
+       |> redirect(to: Routes.token_confirmation_path(socket, :verify))}
     else
       {:error, %Ecto.Changeset{} = changeset} ->
         {:noreply, assign(socket, changeset: changeset)}

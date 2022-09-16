@@ -21,6 +21,7 @@ defmodule AuthenticatorWeb.Router do
 
     live "/signup", SignUpLive, :index
     live "/signin", SignInLive, :index
+    live "/token_confirmation", TokenConfirmationLive, :verify
     live "/users", UserLive.Index, :index
     live "/users/:id/edit", UserLive.Index, :edit
 

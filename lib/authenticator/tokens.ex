@@ -18,7 +18,18 @@ defmodule Authenticator.Tokens do
   end
 
   def build_token_struct(token, user_id, valid? \\ true) do
-    %Token{login_token: token, user_id: user_id, valid?: valid?}
+    %Token{token: token, user_id: user_id, valid?: valid?}
+  end
+
+  def generate_2fa_token(data) do
+    with confirmation_token <-
+           :crypto.strong_rand_bytes(12)
+           |> Base.encode32()
+           |> :pot.hotp(1),
+         %Token{} = token <- build_token_struct(confirmation_token, data, true),
+         {:ok, _store_token} <- Store.write(token) do
+      {:ok, token}
+    end
   end
 end
 

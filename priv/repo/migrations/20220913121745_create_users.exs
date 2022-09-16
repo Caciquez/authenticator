@@ -5,7 +5,7 @@ defmodule Authenticator.Repo.Migrations.CreateUsers do
     create table(:users) do
       add :email, :string
       add :password, :string
-      add :login_token, :string
+      add :token, :string
 
       timestamps()
     end

@@ -48,7 +48,10 @@ defmodule Authenticator.MixProject do
       {:jason, "~> 1.2"},
       {:plug_cowboy, "~> 2.5"},
       {:bcrypt_elixir, "~> 3.0"},
-      {:active_memory, "~> 0.2.1"}
+      {:active_memory, "~> 0.2.1"},
+      {:libcluster, "~> 3.3"},
+      {:pot, "~> 1.0"},
+      {:swoosh, "~> 1.8"}
     ]
   end
 

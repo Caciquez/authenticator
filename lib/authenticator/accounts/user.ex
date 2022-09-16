@@ -6,7 +6,7 @@ defmodule Authenticator.Accounts.User do
     field :email, :string
     field :password, :string
     field :password_confirmation, :string, virtual: true
-    field :login_token, :string, virtual: true
+    field :token, :string, virtual: true
 
     timestamps()
   end

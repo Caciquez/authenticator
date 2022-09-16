@@ -12,7 +12,7 @@ defmodule Authenticator.AccountsFixtures do
       attrs
       |> Enum.into(%{
         email: "cool_email@gmail.com",
-        login_token: "some_random_token",
+        token: "some_random_token",
         password: "some_password",
         password_confirmation: "some_password"
       })

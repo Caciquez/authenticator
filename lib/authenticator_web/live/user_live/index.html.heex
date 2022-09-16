@@ -27,7 +27,7 @@
     <%= for token <- @tokens do %>
       <tr id={"user-#{token.user_id}"}>
         <td><%= token.user_id %></td>
-        <td><%= token.login_token %></td>
+        <td><%= token.token %></td>
         <td><%= token.valid? %></td>
 
         <td>

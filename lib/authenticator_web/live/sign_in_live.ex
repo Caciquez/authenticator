@@ -3,6 +3,7 @@ defmodule AuthenticatorWeb.SignInLive do
 
   alias Authenticator.Accounts
   alias Authenticator.Tokens
+  alias Authenticator.Mailer
 
   def render(assigns) do
     ~H"""
@@ -46,15 +47,19 @@ defmodule AuthenticatorWeb.SignInLive do
   end
 
   def handle_event("signin", %{"user" => user_params}, socket) do
-    case Accounts.authenticate_user(user_params) do
-      {:ok, user} ->
-        token = Tokens.sign(AuthenticatorWeb.Endpoint, user.id)
+    with {:ok, user} <- Accounts.authenticate_user(user_params),
+         {:ok, token} <- Tokens.generate_2fa_token(user.id) do
+      # ToDo
+      # session_token = Tokens.sign(AuthenticatorWeb.Endpoint, user.id)
+      # add phx token to session
+      # send confirmation token via email
+      IO.inspect(token)
 
-        {:noreply,
-         socket
-         |> put_flash(:info, "User created successfully")
-         |> redirect(to: Routes.user_index_path(socket, :index))}
-
+      {:noreply,
+       socket
+       |> put_flash(:info, "Insert your confirmation Token")
+       |> redirect(to: Routes.token_confirmation_path(socket, :verify))}
+    else
       {:error, reason} ->
         {:noreply, assign(socket, error: reason)}
     end
